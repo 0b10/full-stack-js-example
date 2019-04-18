@@ -1,3 +1,6 @@
+# Ghostwriter
+*.backup
+
 # Logs
 logs
 *.log

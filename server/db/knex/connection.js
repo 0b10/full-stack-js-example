@@ -13,10 +13,11 @@ const envConfig = config[environment];
 // Make the actual DB connection. This runs only once due to Node's module caching.
 const connection = knex(envConfig); // The connection is pooled by default.
 
+// TODO: use logger.
 if (connection) {
   console.log(
-    `* Database connection made with NODE_ENV: '${environment}', \
-    to database '${envConfig.connection.database}'.`,
+    `* Database connection made as '${environment}' env, \
+to database '${envConfig.connection.database}'.`,
   ); // Practice project, just for debugging.
 }
 

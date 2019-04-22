@@ -186,6 +186,10 @@ describe('The database "Account" table', () => {
         const result = await db.account.update.enable('2');
         expect(result).toHaveLength(1);
       });
+      it('should return the correct id', async () => {
+        const result = await db.account.update.enable('2');
+        expect(result[0]).toEqual({ id: '2' });
+      });
     });
   });
 

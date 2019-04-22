@@ -137,6 +137,25 @@ describe('The database "Account" table', () => {
         const result = await db.account.update.password('1', 'newpassword1');
         expect(result).toHaveLength(1);
       });
+      it('should only update the password field.', async () => {
+        await db.account.update.password('1', 'newpassword1');
+        const result = await knex('Account')
+          .select('username', 'email', 'password', 'exists')
+          .where({ id: '1' });
+
+        const { // Get seed data in a predictable form.
+          username,
+          email,
+          exists,
+        } = data.account[0];
+
+        expect(result[0]).toEqual({
+          username,
+          email,
+          password: 'newpassword1',
+          exists,
+        });
+      });
     });
   });
 });

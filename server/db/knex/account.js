@@ -5,15 +5,31 @@ const knex = require('./connection');
  * @param {string} id - The account ID.
  * @param {string} email - The new email addess value.
  * @returns {Array} - An empty array if the update was unsuccessful, or an array with a single
- * object containting the account ID of the row that was updated.
- * @throws Throws an Error if no email is provided.
+ *  object containting the account ID of the row that was updated.
+ * @throws Throws an Error if any of the arguments are omitted.
  * @throws Throws an Error if an invalid id string is provided.
- * @throws Throws an Error if email is greater than 30 chars in length&.
+ * @throws Throws an Error if email is greater than 30 chars in length.
  * @example
  * updateEmail('1', 'some@email.com'); // { id: '1' }
  */
 function updateEmail(id, email) {
   return knex('Account').update({ email }, ['id']).where({ id, exists: true });
+}
+
+/**
+ * Update a password for an account.
+ * @param {string} id - The account ID.
+ * @param {string} password - The new password value.
+ * @returns {Array} - An empty array if the update was unsuccessful, or an array with a single
+ *  object containting the account ID of the row that was updated.
+ * @throws Throws an Error if any of the arguments are omitted.
+ * @throws Throws an Error if an invalid id string is provided.
+ * @throws Throws an Error if password is greater than 64 chars in length.
+ * @example
+ * updatePassword('1', 'apasswordhash'); // { id: '1' }
+ */
+function updatePassword(id, password) {
+  return knex('Account').update({ password }, ['id']).where({ id, exists: true });
 }
 
 module.exports = {
@@ -39,10 +55,11 @@ module.exports = {
   /**
    * @namespace
    * @borrows updateEmail as email
+   * @borrows updatePassword as password
    */
   update: {
     email: updateEmail,
-    password: (id, password) => knex('Account').update({ password }).where({ id }),
+    password: updatePassword,
     existence: (id, exists) => knex('Account').update({ exists }).where({ id }),
   },
 };

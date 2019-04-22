@@ -93,16 +93,44 @@ describe('The database "Account" table', () => {
             expect(result1[0]).toEqual({ id: '1' });
           });
       });
-      it('should return an empty record given a non-existent username.', async () => {
+      it('should return an empty record given a non-existent id.', async () => {
         const result = await db.account.update.email('12983678621763', 'newtest@email.com');
         expect(result).toHaveLength(0);
       });
-      it('should throw an error given no value to update with.', async () => { // eslint-disable-line arrow-body-style
+      it('should throw an error given no value to update with.', () => { // eslint-disable-line arrow-body-style
         return db.account.update.email('1')
           .catch(e => expect(e).toBeDefined());
       });
       it('should return an error given an invalid account id type.', () => { // eslint-disable-line arrow-body-style
         return db.account.update.email('astring', 'newtest@email.com')
+          .catch(e => expect(e).toBeDefined());
+      });
+    });
+
+    describe('password()', () => {
+      it('should only update a record when "exists" is set to true.', async () => { // eslint-disable-line arrow-body-style
+        // Test accounts that both do and do not 'exists'.
+
+        return Promise.all([
+          db.account.update.password('1', 'newpassword1'), // "exists" set to true.
+          db.account.update.password('2', 'newpassword2'), // "exists" set to false.
+        ])
+          .then(([result1, result2]) => {
+            expect(result1).toHaveLength(1);
+            expect(result2).toHaveLength(0);
+            expect(result1[0]).toEqual({ id: '1' });
+          });
+      });
+      it('should return an empty record given a non-existent id.', async () => {
+        const result = await db.account.update.password('12983678621763', 'newpassword1');
+        expect(result).toHaveLength(0);
+      });
+      it('should throw an error given no value to update with.', () => { // eslint-disable-line arrow-body-style
+        return db.account.update.password('1')
+          .catch(e => expect(e).toBeDefined());
+      });
+      it('should return an error given an invalid account id type.', () => { // eslint-disable-line arrow-body-style
+        return db.account.update.password('astring', 'newpassword1')
           .catch(e => expect(e).toBeDefined());
       });
     });

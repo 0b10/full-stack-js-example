@@ -27,6 +27,10 @@ describe('The database "Account" table', () => {
             expect(result2).toHaveLength(0);
           });
       });
+      it('should return an empty record given an invalid username.', async () => {
+        const result = await db.account.read.privateInfo('12983678621763');
+        expect(result).toHaveLength(0);
+      });
     });
   });
 });

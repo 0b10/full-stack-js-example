@@ -6,6 +6,7 @@ const knex = require('./connection');
  * @param {string} email - The new email addess value.
  * @returns {Array} - An empty array if the update was unsuccessful, or an array with a single
  * object containting the account ID of the row that was updated.
+ * @throws Throws an Error if no email is provided.
  * @example
  * updateEmail('1', 'some@email.com'); // { id: '1' }
  */

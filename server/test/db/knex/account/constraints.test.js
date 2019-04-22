@@ -80,7 +80,7 @@ describe('The database "Account" table', () => {
 
   describe('"Update" operations', () => {
     describe('email()', () => {
-      it('should only update a record when "exists" is set to true.', async () => {
+      it('should only update a record when "exists" is set to true.', async () => { // eslint-disable-line arrow-body-style
         // Test accounts that both do and do not 'exists'.
 
         return Promise.all([
@@ -93,10 +93,14 @@ describe('The database "Account" table', () => {
             expect(result1[0]).toEqual({ id: '1' });
           });
       });
-      // it('should return an empty record given a non-existent username.', async () => {
-      //   const result = await db.account.update.email('12983678621763');
-      //   expect(result).toHaveLength(0);
-      // });
+      it('should return an empty record given a non-existent username.', async () => {
+        const result = await db.account.update.email('12983678621763', 'newtestemail@email.com');
+        expect(result).toHaveLength(0);
+      });
+      it('should throw an error given no value to update with.', async () => { // eslint-disable-line arrow-body-style
+        return db.account.update.email('1')
+          .catch(e => expect(e).toBeDefined());
+      });
       // it('should return an error given an invalid username type.', () => { // eslint-disable-line arrow-body-style
       //   return db.account.update.email('astring')
       //     .catch(e => expect(e).toBeDefined());

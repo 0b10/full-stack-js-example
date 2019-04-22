@@ -44,7 +44,7 @@ function updatePassword(id, password) {
  * @throws Throws an Error if email is greater than 30 chars in length.
  * @throws Throws an Error if password is greater than 64 chars in length.
  * @example
- * createAccount('foo', 'bar@email.com', 'mypassword') // { id: '27' }
+ * createAccount('foo', 'bar@email.com', 'mypassword'); // { id: '27' }
  */
 function createAccount(username, email, password) {
   return knex('Account')
@@ -54,6 +54,34 @@ function createAccount(username, email, password) {
       password,
       exists: true,
     }, ['id']);
+}
+
+/**
+ * Enable an account.
+ * @param {string} id - A digit string that matches the account ID.
+ * @returns {Array} - An array with a single object containting the (account) ID if the update
+ *  was successful, otherwise an empty array if the account was not found.
+ * @throws Throws an Error if the id isn't a string representation of an integer.
+ * @throws Throws an Error if id is omitted.
+ * @example
+ * enableAccount('19'); // { id: '19' }
+ */
+function enableAccount(id) {
+  return knex('Account').update({ exists: true }, ['id']).where({ id });
+}
+
+/**
+ * Disable an account.
+ * @param {string} id - A digit string that matches the account ID.
+ * @returns {Array} - An array with a single object containting the (account) ID if the update
+ *  was successful, otherwise an empty array if the account was not found.
+ * @throws Throws an Error if the id isn't a string representation of an integer.
+ * @throws Throws an Error if id is omitted.
+ * @example
+ * disableAccount('87'); // { id: '87' }
+ */
+function disableAccount(id) {
+  return knex('Account').update({ exists: false }, ['id']).where({ id });
 }
 
 module.exports = {
@@ -78,11 +106,13 @@ module.exports = {
    * @namespace
    * @borrows updateEmail as email
    * @borrows updatePassword as password
+   * @borrows enableAccount as enable
+   * @borrows disableAccount as disable
    */
   update: {
     email: updateEmail,
     password: updatePassword,
-    enable: id => knex('Account').update({ exists: true }, ['id']).where({ id }),
-    disable: id => knex('Account').update({ exists: false }, ['id']).where({ id }),
+    enable: enableAccount,
+    disable: disableAccount,
   },
 };

@@ -40,7 +40,7 @@ module.exports = {
         email,
         password,
         exists: true,
-      }),
+      }, ['id']),
   },
   read: {
     privateInfo: username => knex('Account')

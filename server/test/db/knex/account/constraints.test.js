@@ -181,4 +181,14 @@ describe('The database "Account" table', () => {
       });
     });
   });
+
+  describe('"Create" operations', () => {
+    describe('register()', () => {
+      it('should create only a single record.', async () => {
+        const result = await db.account.create
+          .register('newtestuser', 'newtest@email.com', 'anewtestpasswordhash');
+        expect(result).toHaveLength(1);
+      });
+    });
+  });
 });

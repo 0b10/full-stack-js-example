@@ -184,6 +184,7 @@ describe('The database "Account" table', () => {
 
   describe('"Create" operations', () => {
     describe('register()', () => {
+      // Tests for modification of only relevant fields is done in the 'simple' test module.
       it('should create only a single record.', async () => {
         const result = await db.account.create
           .register('newtestuser', 'newtest@email.com', 'anewtestpasswordhash');

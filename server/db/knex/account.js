@@ -32,15 +32,37 @@ function updatePassword(id, password) {
   return knex('Account').update({ password }, ['id']).where({ id, exists: true });
 }
 
+/**
+ * Create an account.
+ * @param {string} username - The username.
+ * @param {string} email - The email.
+ * @param {string} password - The password.
+ * @returns {Array} - An array with a single object containting the (account) ID for the newly
+ *  inserted row.
+ * @throws Throws an Error if any of the arguments are omitted.
+ * @throws Throws an Error if username is greater than 20 chars in length.
+ * @throws Throws an Error if email is greater than 30 chars in length.
+ * @throws Throws an Error if password is greater than 64 chars in length.
+ * @example
+ * createAccount('foo', 'bar@email.com', 'mypassword') // { id: '27' }
+ */
+function createAccount(username, email, password) {
+  return knex('Account')
+    .insert({
+      username,
+      email,
+      password,
+      exists: true,
+    }, ['id']);
+}
+
 module.exports = {
+  /**
+   * @namespace
+   * @borrows createAccount as register
+   */
   create: {
-    register: (username, email, password) => knex('Account')
-      .insert({
-        username,
-        email,
-        password,
-        exists: true,
-      }, ['id']),
+    register: createAccount,
   },
   read: {
     privateInfo: username => knex('Account')

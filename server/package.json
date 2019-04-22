@@ -7,7 +7,7 @@
     "lint": "eslint ./",
     "refreshdb": "knex migrate:rollback --env test && knex migrate:latest --env test && knex seed:run --env test",
     "start": "node ./bin/www",
-    "test": "PGPASSFILE=~/.pgpass NODE_ENV=test mocha test/**/*.test.js"
+    "test": "jest"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
@@ -19,11 +19,10 @@
     "pg": "^7.10.0"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.17.2",
-    "mocha": "^6.1.3",
+    "jest": "^24.7.1",
     "nodemon": "^1.18.11",
     "supertest": "^4.0.2"
   }

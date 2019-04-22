@@ -56,5 +56,25 @@ describe('The database "Account" table', () => {
         expect(result).toHaveLength(0);
       });
     });
+
+    describe('password()', () => {
+      it('should only return a record when "exists" is set to true.', async () => {
+        const user1Result = db.account.read.password('1'); // "exists" set to true.
+        const user2Result = db.account.read.password('2'); // "exists" set to false.
+        return Promise.all([user1Result, user2Result])
+          .then(([result1, result2]) => {
+            expect(result1).toHaveLength(1);
+            expect(result2).toHaveLength(0);
+          });
+      });
+      it('should return an empty record given a non-existent username.', async () => {
+        const result = await db.account.read.password('12983678621763');
+        expect(result).toHaveLength(0);
+      });
+      it('should return an error given an invalid username type.', () => { // eslint-disable-line arrow-body-style
+        return db.account.read.password('astring')
+          .catch(e => expect(e).toBeDefined());
+      });
+    });
   });
 });

@@ -189,6 +189,14 @@ describe('The database "Account" table', () => {
           .register('newtestuser', 'newtest@email.com', 'anewtestpasswordhash');
         expect(result).toHaveLength(1);
       });
+      it('should return the correct id', async () => {
+        const result = await db.account.create
+          .register('djiwrt62$%lkeoi', 'newtest@email.com', 'anewtestpasswordhash');
+        const check = await knex('Account')
+          .select('id')
+          .where({ username: 'djiwrt62$%lkeoi' });
+        expect(result[0]).toEqual(check[0]);
+      });
     });
   });
 });

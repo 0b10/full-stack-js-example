@@ -133,6 +133,10 @@ describe('The database "Account" table', () => {
         return db.account.update.password('astring', 'newpassword1')
           .catch(e => expect(e).toBeDefined());
       });
+      it('should only update a single record.', async () => {
+        const result = await db.account.update.password('1', 'newpassword1');
+        expect(result).toHaveLength(1);
+      });
     });
   });
 });

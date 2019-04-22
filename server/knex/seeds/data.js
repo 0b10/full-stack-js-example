@@ -34,7 +34,7 @@ module.exports = {
       username: 'user2',
       email: 'user2@email.com',
       password: '530044660947a58cbf6036c0aa2922d9882734e51f7ec22a2640ee9f542ebc82',
-      exists: true,
+      exists: false, // A number of tests require that this is set to false.
     }, {
       username: 'user3',
       email: 'user3@email.com',

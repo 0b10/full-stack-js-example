@@ -82,6 +82,7 @@ module.exports = {
   update: {
     email: updateEmail,
     password: updatePassword,
-    existence: (id, exists) => knex('Account').update({ exists }).where({ id }),
+    enable: id => knex('Account').update({ exists: true }, ['id']).where({ id }),
+    disable: id => knex('Account').update({ exists: false }, ['id']).where({ id }),
   },
 };

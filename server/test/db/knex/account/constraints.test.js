@@ -180,6 +180,13 @@ describe('The database "Account" table', () => {
         });
       });
     });
+
+    describe('enable()', () => {
+      it('should only modify a single record', async () => {
+        const result = await db.account.update.enable('2');
+        expect(result).toHaveLength(1);
+      });
+    });
   });
 
   describe('"Create" operations', () => {

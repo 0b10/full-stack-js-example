@@ -105,6 +105,29 @@ describe('The database "Account" table', () => {
         return db.account.update.email('astring', 'newtest@email.com')
           .catch(e => expect(e).toBeDefined());
       });
+      it('should only update a single record.', async () => {
+        const result = await db.account.update.email('1', 'newtest@email.com');
+        expect(result).toHaveLength(1);
+      });
+      it('should only update the email field.', async () => {
+        await db.account.update.email('1', 'newtest@email.com');
+        const result = await knex('Account')
+          .select('username', 'email', 'password', 'exists')
+          .where({ id: '1' });
+
+        const { // Get seed data in a predictable form.
+          username,
+          password,
+          exists,
+        } = data.account[0];
+
+        expect(result[0]).toEqual({
+          username,
+          email: 'newtest@email.com',
+          password,
+          exists,
+        });
+      });
     });
 
     describe('password()', () => {

@@ -77,4 +77,30 @@ describe('The database "Account" table', () => {
       });
     });
   });
+
+  describe('"Update" operations', () => {
+    describe('email()', () => {
+      it('should only update a record when "exists" is set to true.', async () => {
+        // Test accounts that both do and do not 'exists'.
+
+        return Promise.all([
+          db.account.update.email('1', 'newtest@email.com'), // "exists" set to true.
+          db.account.update.email('2', 'newtest@email2.com'), // "exists" set to false.
+        ])
+          .then(([result1, result2]) => {
+            expect(result1).toHaveLength(1);
+            expect(result2).toHaveLength(0);
+            expect(result1[0]).toEqual({ id: '1' });
+          });
+      });
+      // it('should return an empty record given a non-existent username.', async () => {
+      //   const result = await db.account.update.email('12983678621763');
+      //   expect(result).toHaveLength(0);
+      // });
+      // it('should return an error given an invalid username type.', () => { // eslint-disable-line arrow-body-style
+      //   return db.account.update.email('astring')
+      //     .catch(e => expect(e).toBeDefined());
+      // });
+    });
+  });
 });

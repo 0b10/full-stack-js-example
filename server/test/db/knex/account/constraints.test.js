@@ -190,6 +190,14 @@ describe('The database "Account" table', () => {
         const result = await db.account.update.enable('2');
         expect(result[0]).toEqual({ id: '2' });
       });
+      it('should modify only the "exists" field', async () => {
+        await db.account.update.enable('2');
+        const { username, email, password } = data.account[1];
+        const result = await knex('Account')
+          .select('username', 'email', 'password', 'exists')
+          .where({ id: '2' });
+        expect(result[0]).toEqual({ username, email, password, exists: true });
+      });
     });
   });
 

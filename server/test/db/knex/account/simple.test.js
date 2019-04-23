@@ -63,15 +63,15 @@ describe('The database "Account" table', () => {
       const result = await knex('Account').select('password').where({ id: '1' });
       expect(result[0]).toEqual({ password: 'newtestpassword' });
     });
-    it('enable(): Should update "exists" with true.', async () => {
+    it('enable(): Should update "enabled" with true.', async () => {
       await db.account.update.enable('2');
-      const result = await knex('Account').select('exists').where({ id: '2' });
-      expect(result[0]).toEqual({ exists: true });
+      const result = await knex('Account').select('enabled').where({ id: '2' });
+      expect(result[0]).toEqual({ enabled: true });
     });
-    it('disable(): Should update "exists" with false.', async () => {
+    it('disable(): Should update "enabled" with false.', async () => {
       await db.account.update.disable('1');
-      const result = await knex('Account').select('exists').where({ id: '1' });
-      expect(result[0]).toEqual({ exists: false });
+      const result = await knex('Account').select('enabled').where({ id: '1' });
+      expect(result[0]).toEqual({ enabled: false });
     });
   });
 });

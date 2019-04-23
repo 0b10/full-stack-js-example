@@ -13,7 +13,7 @@ const knex = require('./connection');
  * updateEmail('1', 'some@email.com'); // { id: '1' }
  */
 function updateEmail(id, email) {
-  return knex('Account').update({ email }, ['id']).where({ id, exists: true });
+  return knex('Account').update({ email }, ['id']).where({ id, enabled: true });
 }
 
 /**
@@ -29,7 +29,7 @@ function updateEmail(id, email) {
  * updatePassword('1', 'apasswordhash'); // { id: '1' }
  */
 function updatePassword(id, password) {
-  return knex('Account').update({ password }, ['id']).where({ id, exists: true });
+  return knex('Account').update({ password }, ['id']).where({ id, enabled: true });
 }
 
 /**
@@ -52,7 +52,7 @@ function createAccount(username, email, password) {
       username,
       email,
       password,
-      exists: true,
+      enabled: true,
     }, ['id']);
 }
 
@@ -67,7 +67,7 @@ function createAccount(username, email, password) {
  * enableAccount('19'); // { id: '19' }
  */
 function enableAccount(id) {
-  return knex('Account').update({ exists: true }, ['id']).where({ id });
+  return knex('Account').update({ enabled: true }, ['id']).where({ id });
 }
 
 /**
@@ -81,7 +81,7 @@ function enableAccount(id) {
  * disableAccount('87'); // { id: '87' }
  */
 function disableAccount(id) {
-  return knex('Account').update({ exists: false }, ['id']).where({ id });
+  return knex('Account').update({ enabled: false }, ['id']).where({ id });
 }
 
 module.exports = {
@@ -97,10 +97,10 @@ module.exports = {
       .select('id', 'email')
       .where({
         username,
-        exists: true,
+        enabled: true,
       }),
-    publicInfo: username => knex('Account').select('id').where({ username, exists: true }),
-    password: id => knex('Account').select('password').where({ id, exists: true }),
+    publicInfo: username => knex('Account').select('id').where({ username, enabled: true }),
+    password: id => knex('Account').select('password').where({ id, enabled: true }),
   },
   /**
    * @namespace

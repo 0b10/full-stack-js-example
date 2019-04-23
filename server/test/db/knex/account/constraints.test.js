@@ -18,9 +18,9 @@ afterAll(() => knex.destroy(() => console.log('DB pooling connection destroyed.'
 describe('The database "Account" table', () => {
   describe('"Read" operations', () => {
     describe('privateInfo()', () => {
-      it('should only return a record when "exists" is set to true.', async () => {
-        const user1Result = db.account.read.privateInfo('user1'); // "exists" set to true.
-        const user2Result = db.account.read.privateInfo('user2'); // "exists" set to false.
+      it('should only return a record when "enabled" is set to true.', async () => {
+        const user1Result = db.account.read.privateInfo('user1'); // "enabled" set to true.
+        const user2Result = db.account.read.privateInfo('user2'); // "enabled" set to false.
         return Promise.all([user1Result, user2Result])
           .then(([result1, result2]) => {
             expect(result1).toHaveLength(1);
@@ -38,9 +38,9 @@ describe('The database "Account" table', () => {
     });
 
     describe('publicInfo()', () => {
-      it('should only return a record when "exists" is set to true.', async () => {
-        const user1Result = db.account.read.publicInfo('user1'); // "exists" set to true.
-        const user2Result = db.account.read.publicInfo('user2'); // "exists" set to false.
+      it('should only return a record when "enabled" is set to true.', async () => {
+        const user1Result = db.account.read.publicInfo('user1'); // "enabled" set to true.
+        const user2Result = db.account.read.publicInfo('user2'); // "enabled" set to false.
         return Promise.all([user1Result, user2Result])
           .then(([result1, result2]) => {
             expect(result1).toHaveLength(1);
@@ -58,9 +58,9 @@ describe('The database "Account" table', () => {
     });
 
     describe('password()', () => {
-      it('should only return a record when "exists" is set to true.', async () => {
-        const user1Result = db.account.read.password('1'); // "exists" set to true.
-        const user2Result = db.account.read.password('2'); // "exists" set to false.
+      it('should only return a record when "enabled" is set to true.', async () => {
+        const user1Result = db.account.read.password('1'); // "enabled" set to true.
+        const user2Result = db.account.read.password('2'); // "enabled" set to false.
         return Promise.all([user1Result, user2Result])
           .then(([result1, result2]) => {
             expect(result1).toHaveLength(1);
@@ -80,12 +80,12 @@ describe('The database "Account" table', () => {
 
   describe('"Update" operations', () => {
     describe('email()', () => {
-      it('should only update a record when "exists" is set to true.', async () => { // eslint-disable-line arrow-body-style
-        // Test accounts that both do and do not 'exists'.
+      it('should only update a record when "enabled" is set to true.', async () => { // eslint-disable-line arrow-body-style
+        // Test both enabled and disabled accounts.
 
         return Promise.all([
-          db.account.update.email('1', 'newtest@email.com'), // "exists" set to true.
-          db.account.update.email('2', 'newtest@email2.com'), // "exists" set to false.
+          db.account.update.email('1', 'newtest@email.com'), // "enabled" set to true.
+          db.account.update.email('2', 'newtest@email2.com'), // "enabled" set to false.
         ])
           .then(([result1, result2]) => {
             expect(result1).toHaveLength(1);
@@ -112,31 +112,31 @@ describe('The database "Account" table', () => {
       it('should only update the email field.', async () => {
         await db.account.update.email('1', 'newtest@email.com');
         const result = await knex('Account')
-          .select('username', 'email', 'password', 'exists')
+          .select('username', 'email', 'password', 'enabled')
           .where({ id: '1' });
 
         const { // Get seed data in a predictable form.
           username,
           password,
-          exists,
+          enabled,
         } = data.account[0];
 
         expect(result[0]).toEqual({
           username,
           email: 'newtest@email.com',
           password,
-          exists,
+          enabled,
         });
       });
     });
 
     describe('password()', () => {
-      it('should only update a record when "exists" is set to true.', async () => { // eslint-disable-line arrow-body-style
-        // Test accounts that both do and do not 'exists'.
+      it('should only update a record when "enabled" is set to true.', async () => { // eslint-disable-line arrow-body-style
+        // Test both enabled and disabled accounts.
 
         return Promise.all([
-          db.account.update.password('1', 'newpassword1'), // "exists" set to true.
-          db.account.update.password('2', 'newpassword2'), // "exists" set to false.
+          db.account.update.password('1', 'newpassword1'), // "enabled" set to true.
+          db.account.update.password('2', 'newpassword2'), // "enabled" set to false.
         ])
           .then(([result1, result2]) => {
             expect(result1).toHaveLength(1);
@@ -163,20 +163,20 @@ describe('The database "Account" table', () => {
       it('should only update the password field.', async () => {
         await db.account.update.password('1', 'newpassword1');
         const result = await knex('Account')
-          .select('username', 'email', 'password', 'exists')
+          .select('username', 'email', 'password', 'enabled')
           .where({ id: '1' });
 
         const { // Get seed data in a predictable form.
           username,
           email,
-          exists,
+          enabled,
         } = data.account[0];
 
         expect(result[0]).toEqual({
           username,
           email,
           password: 'newpassword1',
-          exists,
+          enabled,
         });
       });
     });
@@ -190,13 +190,13 @@ describe('The database "Account" table', () => {
         const result = await db.account.update.enable('2');
         expect(result[0]).toEqual({ id: '2' });
       });
-      it('should modify only the "exists" field', async () => {
+      it('should modify only the "enabled" field', async () => {
         await db.account.update.enable('2');
         const { username, email, password } = data.account[1];
         const result = await knex('Account')
-          .select('username', 'email', 'password', 'exists')
+          .select('username', 'email', 'password', 'enabled')
           .where({ id: '2' });
-        expect(result[0]).toEqual({ username, email, password, exists: true });
+        expect(result[0]).toEqual({ username, email, password, enabled: true });
       });
     });
 
@@ -209,13 +209,13 @@ describe('The database "Account" table', () => {
         const result = await db.account.update.disable('1');
         expect(result[0]).toEqual({ id: '1' });
       });
-      it('should modify only the "exists" field', async () => {
+      it('should modify only the "enabled" field', async () => {
         await db.account.update.disable('1');
         const { username, email, password } = data.account[0];
         const result = await knex('Account')
-          .select('username', 'email', 'password', 'exists')
+          .select('username', 'email', 'password', 'enabled')
           .where({ id: '1' });
-        expect(result[0]).toEqual({ username, email, password, exists: false });
+        expect(result[0]).toEqual({ username, email, password, enabled: false });
       });
     });
   });

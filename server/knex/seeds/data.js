@@ -29,32 +29,29 @@ module.exports = {
       username: 'user1',
       email: 'user1@email.com',
       password: 'ca7ff1090441a69d97677bb0bab331617429a362a2835a29eb5f3f47600a10f0',
-      exists: true,
+      enabled: true,  // Explicit, because tests depend on this being true.
     }, {
       username: 'user2',
       email: 'user2@email.com',
       password: '530044660947a58cbf6036c0aa2922d9882734e51f7ec22a2640ee9f542ebc82',
-      exists: false, // A number of tests require that this is set to false.
+      enabled: false, // A number of tests require that this is set to false.
     }, {
       username: 'user3',
       email: 'user3@email.com',
       password: 'b4e8183bc3773e785982918eefcab56eb390b2582a06812739d97d944830293f',
-      exists: true,
     }, {
       username: 'user4',
       email: 'user4@email.com',
       password: 'a8d372305113b3e05aee426958f363b2a2d32bd57501b6e295e633cca34ec154',
-      exists: true,
     }, {
       username: 'user5',
       email: 'user5@email.com',
       password: '9fb257c2d1281f518d8ccb6f3eeb30b1d92bcf66ddb413db2d8f0dafaa47659f',
-      exists: true,
     }, {
       username: 'user6',
       email: 'user6@email.com',
       password: 'ffacbbb7af9c95a652b97a8775917d63fe5ff2775ce5676b8c7317a68a53b2ce',
-      exists: false,
+      enabled: false,
     },
   ],
   post: [

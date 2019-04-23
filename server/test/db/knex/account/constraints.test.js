@@ -199,6 +199,25 @@ describe('The database "Account" table', () => {
         expect(result[0]).toEqual({ username, email, password, exists: true });
       });
     });
+
+    describe('disable()', () => {
+      it('should only modify a single record', async () => {
+        const result = await db.account.update.disable('1');
+        expect(result).toHaveLength(1);
+      });
+      it('should return the correct id', async () => {
+        const result = await db.account.update.disable('1');
+        expect(result[0]).toEqual({ id: '1' });
+      });
+      it('should modify only the "exists" field', async () => {
+        await db.account.update.disable('1');
+        const { username, email, password } = data.account[0];
+        const result = await knex('Account')
+          .select('username', 'email', 'password', 'exists')
+          .where({ id: '1' });
+        expect(result[0]).toEqual({ username, email, password, exists: false });
+      });
+    });
   });
 
   describe('"Create" operations', () => {

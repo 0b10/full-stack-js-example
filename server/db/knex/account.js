@@ -22,7 +22,7 @@ function updateEmail(id, email) {
   return knex('Account')
     .update({ email }, ['id'])
     .where({ id, enabled: true })
-    .catch(() => Promise.resolve({ error: true })); // TODO: Log error object.
+    .catch(() => Promise.reject(Error())); // TODO: Log error object.
 }
 
 /**
@@ -43,7 +43,7 @@ function updatePassword(id, password) {
   return knex('Account')
     .update({ password }, ['id'])
     .where({ id, enabled: true })
-    .catch(() => Promise.resolve({ error: true })); // TODO: Log error object.
+    .catch(() => Promise.reject(Error())); // TODO: Log error object.
 }
 
 /**
@@ -63,7 +63,7 @@ function updatePassword(id, password) {
 function createAccount(username, email, password) {
   return knex('Account')
     .insert({ username, email, password, enabled: true }, ['id'])
-    .catch(() => Promise.resolve({ error: true })); // TODO: Log error object.
+    .catch(() => Promise.reject(Error())); // TODO: Log error object.
 }
 
 /**
@@ -82,7 +82,7 @@ function enableAccount(id) {
   return knex('Account')
     .update({ enabled: true }, ['id'])
     .where({ id })
-    .catch(() => Promise.resolve({ error: true })); // TODO: Log error object.
+    .catch(() => Promise.reject(Error())); // TODO: Log error object.
 }
 
 /**
@@ -101,7 +101,7 @@ function disableAccount(id) {
   return knex('Account')
     .update({ enabled: false }, ['id'])
     .where({ id })
-    .catch(() => Promise.resolve({ error: true })); // TODO: Log error object.
+    .catch(() => Promise.reject(Error())); // TODO: Log error object.
 }
 
 /**
@@ -118,7 +118,7 @@ function getPrivateInfo(username) {
   return knex('Account')
     .select('id', 'email')
     .where({ username, enabled: true })
-    .catch(() => Promise.resolve({ error: true })); // TODO: Log error object.
+    .catch(() => Promise.reject(Error())); // TODO: Log error object.
 }
 
 /**
@@ -135,7 +135,7 @@ function getPublicInfo(username) {
   return knex('Account')
     .select('id')
     .where({ username, enabled: true })
-    .catch(() => Promise.resolve({ error: true })); // TODO: Log error object.
+    .catch(() => Promise.reject(Error())); // TODO: Log error object.
 }
 
 /**
@@ -155,7 +155,7 @@ function getPassword(id) {
   return knex('Account')
     .select('password')
     .where({ id, enabled: true })
-    .catch(() => Promise.resolve({ error: true })); // TODO: Log error object.
+    .catch(() => Promise.reject(Error())); // TODO: Log error object.
 }
 
 module.exports = {

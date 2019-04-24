@@ -15,7 +15,7 @@ const tableName = 'Post';
 function createNew(posterId, title, body) {
   return knex(tableName)
     .insert({ title, body, poster_id: posterId }, ['id'])
-    .catch(() => Promise.resolve({ error: true })); // TODO: Log error object.
+    .catch(() => Promise.reject(Error())); // TODO: Log error object.
 }
 
 /**
@@ -32,7 +32,7 @@ function editPost(id, title = false, body = false) {
   return knex(tableName)
     .update({ id, body, title }, ['id'])
     .where({ id, hidden: false })
-    .catch(() => Promise.resolve({ error: true })); // TODO: Log error object.
+    .catch(() => Promise.reject(Error())); // TODO: Log error object.
 }
 
 /**
@@ -46,7 +46,7 @@ function hide(id) {
   return knex(tableName)
     .update({ hidden: true }, ['id'])
     .where({ id })
-    .catch(() => Promise.resolve({ error: true })); // TODO: Log error object.
+    .catch(() => Promise.reject(Error())); // TODO: Log error object.
 }
 
 /**
@@ -60,7 +60,7 @@ function unhide(id) {
   return knex(tableName)
     .update({ hidden: false }, ['id'])
     .where({ id })
-    .catch(() => Promise.resolve({ error: true })); // TODO: Log error object.
+    .catch(() => Promise.reject(Error())); // TODO: Log error object.
 }
 
 /**
@@ -75,7 +75,7 @@ function getById(id) {
   return knex(tableName)
     .select('title', 'body', 'created_at', 'poster_id')
     .where({ id, hidden: false })
-    .catch(() => Promise.resolve({ error: true })); // TODO: Log error object.
+    .catch(() => Promise.reject(Error())); // TODO: Log error object.
 }
 
 /**
@@ -106,7 +106,7 @@ function getAll(order = 'desc') {
     .select('title', 'body', 'created_at', 'poster_id')
     .where({ hidden: false })
     .orderBy('created_at', order)
-    .catch(() => Promise.resolve({ error: true })); // TODO: Log error object.
+    .catch(() => Promise.reject(Error())); // TODO: Log error object.
 }
 
 module.exports = {

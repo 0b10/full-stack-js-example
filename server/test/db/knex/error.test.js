@@ -15,24 +15,25 @@ beforeEach(async () => {
 // beforreAll, and afterAll are called once per module.
 afterAll(() => knex.destroy(() => console.log('DB pooling connection destroyed.')));
 
-describe('All database operations', () => {
-  const behaviours = [
-    db.account.create.register,
-    db.account.read.privateInfo,
-    db.account.read.publicInfo,
-    db.account.read.password,
-    db.account.update.email,
-    db.account.update.password,
-    db.account.update.enable,
-    db.account.update.disable,
-    db.post.create.new,
-    db.post.read.byId,
-    db.post.update.edit,
-    db.post.update.hide,
-    db.post.update.unhide,
-  ];
-  behaviours.forEach((behaviour) => {
-    it('should reject promise with { error: true } for no params.', async () => behaviour()
-      .catch(retval => expect(retval).toEqual({ error: true })));
+describe('All database operations that take args, when given none', () => {
+  const funcs = [];
+  funcs['account.create.register()'] = db.account.create.register;
+  funcs['account.read.privateInfo()'] = db.account.read.privateInfo;
+  funcs['account.read.publicInfo()'] = db.account.read.publicInfo;
+  funcs['account.read.password()'] = db.account.read.password;
+  funcs['account.update.email()'] = db.account.update.email;
+  funcs['account.update.password()'] = db.account.update.password;
+  funcs['account.update.enable()'] = db.account.update.enable;
+  funcs['account.update.disable()'] = db.account.update.disable;
+  funcs['post.create.new()'] = db.post.create.new;
+  funcs['post.read.byId()'] = db.post.read.byId;
+  funcs['post.update.edit()'] = db.post.update.edit;
+  funcs['post.update.hide()'] = db.post.update.hide;
+  funcs['post.update.unhide()'] = db.post.update.unhide;
+
+  Object.entries(funcs).forEach(([name, func]) => {
+    it(`${name}: should return a rejected promise, as a thrown error`, () => expect(func())
+      .rejects // Check that the promise is rejected.
+      .toThrow()); // Check that it's rejected with Error object. You can check for a message too.
   });
 });

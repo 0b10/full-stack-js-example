@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 const knex = require('../../../db/knex/connection');
 const db = require('../../../db');
-const data = require('../../../knex/seeds/data');
 
 // beforeEach, afterEach is called once between tests.
 beforeEach(async () => {

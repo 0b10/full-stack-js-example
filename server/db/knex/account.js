@@ -3,6 +3,7 @@
  */
 // TODO: unwrap results that contain a single result. Log any results that are > 1.
 const knex = require('./connection');
+const { normal: log } = require('../../logger');
 
 /**
  * Update an email address for an account.
@@ -63,7 +64,19 @@ function updatePassword(id, password) {
 function createAccount(username, email, password) {
   return knex('Account')
     .insert({ username, email, password, enabled: true }, ['id'])
-    .catch(() => Promise.reject(Error())); // TODO: Log error object.
+    .catch((e) => {
+      log.error(
+        { e,
+          params: {
+            username,
+            email,
+            password: `*REDACTED* @ length:${password.length}`,
+          },
+        },
+        'Database:createAccount() failed.',
+      );
+      return Promise.reject(e);
+    }); // TODO: Log error object.
 }
 
 /**

@@ -14,6 +14,9 @@ const pgpass = require('fs')
 
 if (pgpass.length <= 0) throw Error('There is no valid connection info in the pgpass file.');
 
+const { normal: log } = require('./logger');
+
+
 // Holds the credentials from each valid line. Each top-level key is a database name.
 const credentials = {};
 
@@ -39,6 +42,42 @@ console.log('* Database credentials:\n', credentials);
 const devdb = credentials.dev_full_stack_js_example;
 const testdb = credentials.test_full_stack_js_example;
 
+// Override the knex logging methods.
+const logConfig = {
+  warn: (message) => {
+    log.warn({ knex: message }, 'Knex: warning ');
+  },
+  error: (message) => {
+    log.error({ knex: message }, 'Knex: error');
+  },
+  deprecate: (message) => {
+    log.warn({ knex: message }, 'Knex: DEPRECATED');
+  },
+  debug: (message) => {
+    log.debug({ knex: message }, 'Knex: debug');
+  },
+};
+
+// Reuse this config for NODE_ENV=test|debug
+const testConfig = {
+  client: 'pg',
+  connection: {
+    host: testdb.host,
+    port: testdb.port,
+    user: testdb.user,
+    password: testdb.password,
+    database: testdb.name,
+  },
+  migrations: {
+    directory: './knex/migrations',
+  },
+  seeds: {
+    directory: './knex/seeds/db/test',
+  },
+  log: logConfig,
+  debug: true,
+};
+
 module.exports = {
   development: {
     client: 'pg',
@@ -53,20 +92,6 @@ module.exports = {
       directory: './knex/migrations',
     },
   },
-  test: {
-    client: 'pg',
-    connection: {
-      host: testdb.host,
-      port: testdb.port,
-      user: testdb.user,
-      password: testdb.password,
-      database: testdb.name,
-    },
-    migrations: {
-      directory: './knex/migrations',
-    },
-    seeds: {
-      directory: './knex/seeds/db/test',
-    },
-  },
+  test: testConfig,
+  debug: testConfig,
 };
